@@ -18,6 +18,7 @@ package org.apache.hadoop.hdds.scm.pipelines;
 
 import com.google.common.base.Preconditions;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.StorageSize;
 import org.apache.hadoop.hdds.scm.ScmConfigKeys;
 import org.apache.hadoop.hdds.scm.container.common.helpers.Pipeline;
 import org.apache.hadoop.hdds.scm.container.placement.algorithms
@@ -83,9 +84,9 @@ public class PipelineSelector {
     this.nodeManager = nodeManager;
     this.conf = conf;
     this.placementPolicy = createContainerPlacementPolicy(nodeManager, conf);
-    this.containerSize = OzoneConsts.GB * this.conf.getInt(
-        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE_GB,
-        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE_DEFAULT);
+    this.containerSize = StorageSize.getStorageSizeInByte(this.conf.get(
+        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE,
+        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE_DEFAULT));
     node2PipelineMap = new Node2PipelineMap();
     this.standaloneManager =
         new StandaloneManagerImpl(this.nodeManager, placementPolicy,

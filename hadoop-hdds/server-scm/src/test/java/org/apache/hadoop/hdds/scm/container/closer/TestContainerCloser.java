@@ -19,6 +19,7 @@
 package org.apache.hadoop.hdds.scm.container.closer;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.StorageSize;
 import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.hdds.scm.TestUtils;
 import org.apache.hadoop.hdds.scm.container.ContainerMapping;
@@ -49,7 +50,7 @@ import static org.apache.hadoop.hdds.HddsConfigKeys
 import static org.apache.hadoop.hdds.scm.ScmConfigKeys
     .OZONE_SCM_CONTAINER_SIZE_DEFAULT;
 import static org.apache.hadoop.hdds.scm.ScmConfigKeys
-    .OZONE_SCM_CONTAINER_SIZE_GB;
+    .OZONE_SCM_CONTAINER_SIZE;
 import static org.apache.hadoop.hdds.protocol.proto.HddsProtos.LifeCycleEvent
     .CREATE;
 import static org.apache.hadoop.hdds.protocol.proto.HddsProtos.LifeCycleEvent
@@ -70,8 +71,8 @@ public class TestContainerCloser {
   @BeforeClass
   public static void setUp() throws Exception {
     configuration = SCMTestUtils.getConf();
-    size = configuration.getLong(OZONE_SCM_CONTAINER_SIZE_GB,
-        OZONE_SCM_CONTAINER_SIZE_DEFAULT) * 1024 * 1024 * 1024;
+    size = StorageSize.getStorageSizeInByte(configuration.get(OZONE_SCM_CONTAINER_SIZE,
+        OZONE_SCM_CONTAINER_SIZE_DEFAULT));
     configuration.setTimeDuration(HDDS_CONTAINER_REPORT_INTERVAL,
         1, TimeUnit.SECONDS);
     testDir = GenericTestUtils

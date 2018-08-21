@@ -20,6 +20,7 @@ package org.apache.hadoop.hdds.scm.container;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.StorageSize;
 import org.apache.hadoop.hdds.protocol.DatanodeDetails;
 import org.apache.hadoop.hdds.scm.ScmConfigKeys;
 import org.apache.hadoop.hdds.scm.container.common.helpers.ContainerWithPipeline;
@@ -146,9 +147,9 @@ public class ContainerStateManager implements Closeable {
         finalStates);
     initializeStateMachine();
 
-    this.containerSize = OzoneConsts.GB * configuration.getInt(
-        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE_GB,
-        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE_DEFAULT);
+    this.containerSize = StorageSize.getStorageSizeInByte(configuration.get(
+        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE,
+        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE_DEFAULT));
 
     lastUsedMap = new ConcurrentHashMap<>();
     containerCount = new AtomicLong(0);

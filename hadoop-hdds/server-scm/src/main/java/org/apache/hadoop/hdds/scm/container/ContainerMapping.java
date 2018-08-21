@@ -20,6 +20,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Longs;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.StorageSize;
 import org.apache.hadoop.hdds.protocol.DatanodeDetails;
 import org.apache.hadoop.hdds.protocol.proto.HddsProtos.LifeCycleState;
 import org.apache.hadoop.hdds.protocol.proto.HddsProtos.SCMContainerInfo;
@@ -60,7 +61,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import static org.apache.hadoop.hdds.scm.ScmConfigKeys
     .OZONE_SCM_CONTAINER_SIZE_DEFAULT;
 import static org.apache.hadoop.hdds.scm.ScmConfigKeys
-    .OZONE_SCM_CONTAINER_SIZE_GB;
+    .OZONE_SCM_CONTAINER_SIZE;
 import static org.apache.hadoop.hdds.scm.exceptions.SCMException.ResultCodes
     .FAILED_TO_CHANGE_CONTAINER_STATE;
 import static org.apache.hadoop.hdds.server.ServerUtils.getOzoneMetaDirPath;
@@ -124,9 +125,8 @@ public class ContainerMapping implements Mapping {
 
     this.pipelineSelector = new PipelineSelector(nodeManager, conf);
 
-    // To be replaced with code getStorageSize once it is committed.
-    size = conf.getLong(OZONE_SCM_CONTAINER_SIZE_GB,
-        OZONE_SCM_CONTAINER_SIZE_DEFAULT) * 1024 * 1024 * 1024;
+    size = StorageSize.getStorageSizeInByte(conf.get(OZONE_SCM_CONTAINER_SIZE,
+            OZONE_SCM_CONTAINER_SIZE_DEFAULT));
     this.containerStateManager =
         new ContainerStateManager(conf, this);
 

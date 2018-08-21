@@ -95,6 +95,26 @@ public class StorageSize {
 
   }
 
+  /**
+   * Get storage size in Byte, it truncates fractional part to zero
+   *
+   * @param value - string value represent storage size.
+   */
+  public static long getStorageSizeInByte(String value) {
+    StorageSize storageSize = StorageSize.parse(value);
+    return (long) storageSize.getUnit().toBytes(storageSize.getValue());
+  }
+
+  /**
+   * Get storage size in GB, it truncates fractional part to zero
+   *
+   * @param value - string value represent storage size.
+   */
+  public static int getStorageSizeInGB(String value) {
+    StorageSize storageSize = StorageSize.parse(value);
+    return (int) storageSize.getUnit().toGBs(storageSize.getValue());
+  }
+
   public StorageUnit getUnit() {
     return unit;
   }

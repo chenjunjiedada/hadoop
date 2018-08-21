@@ -22,6 +22,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.protobuf.ByteString;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.StorageSize;
 import org.apache.hadoop.hdds.client.BlockID;
 import org.apache.hadoop.hdds.protocol.datanode.proto.ContainerProtos;
 import org.apache.hadoop.hdds.protocol.datanode.proto.ContainerProtos
@@ -140,9 +141,10 @@ public class KeyValueHandler extends Handler {
     blockDeletingService.start();
     // TODO: Add supoort for different volumeChoosingPolicies.
     volumeChoosingPolicy = new RoundRobinVolumeChoosingPolicy();
-    maxContainerSizeGB = config.getInt(ScmConfigKeys
-            .OZONE_SCM_CONTAINER_SIZE_GB, ScmConfigKeys
-        .OZONE_SCM_CONTAINER_SIZE_DEFAULT);
+    maxContainerSizeGB = StorageSize.getStorageSizeInGB(
+            config.get(ScmConfigKeys
+                    .OZONE_SCM_CONTAINER_SIZE, ScmConfigKeys
+                    .OZONE_SCM_CONTAINER_SIZE_DEFAULT));
     // this handler lock is used for synchronizing createContainer Requests,
     // so using a fair lock here.
     handlerLock = new AutoCloseableLock(new ReentrantLock(true));

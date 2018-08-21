@@ -18,6 +18,7 @@ package org.apache.hadoop.hdds.scm.block;
 
 import java.util.UUID;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.StorageSize;
 import org.apache.hadoop.hdds.scm.ScmConfigKeys;
 import org.apache.hadoop.hdds.scm.container.Mapping;
 import org.apache.hadoop.hdds.scm.container.common.helpers.AllocatedBlock;
@@ -98,9 +99,9 @@ public class BlockManagerImpl implements BlockManager, BlockmanagerMXBean {
     this.nodeManager = nodeManager;
     this.containerManager = containerManager;
 
-    this.containerSize = OzoneConsts.GB * conf.getInt(
-        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE_GB,
-        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE_DEFAULT);
+    this.containerSize = StorageSize.getStorageSizeInByte(conf.get(
+        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE,
+        ScmConfigKeys.OZONE_SCM_CONTAINER_SIZE_DEFAULT));
 
     this.containerProvisionBatchSize =
         conf.getInt(

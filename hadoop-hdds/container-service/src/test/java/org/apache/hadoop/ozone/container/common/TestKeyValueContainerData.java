@@ -18,6 +18,7 @@
 
 package org.apache.hadoop.ozone.container.common;
 
+import org.apache.hadoop.conf.StorageSize;
 import org.apache.hadoop.hdds.protocol.datanode.proto.ContainerProtos;
 import org.apache.hadoop.ozone.container.keyvalue.KeyValueContainerData;
 import org.junit.Test;
